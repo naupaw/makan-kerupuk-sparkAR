@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.119.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three-gltf-loader@1.111.0/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+</html>
+<body>
+  <script type="module">
+    const scene = new THREE.Scene()
+    const loader = new GLTFLoader()
+    scene.fog = new THREE.Fog(0x000000, 0, 500)
+    // scene.background = new THREE.Color('#eaeaea')
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    )
+    camera.position.z = 5
+    camera.position.y = 0.1 * 20
+    // camera.rotation.x = -0.5
+    // camera.position.x = 0.03
+
+    var ambient = new THREE.AmbientLight(0x111111)
+    scene.add(ambient)
+
+    const renderer = new THREE.WebGLRenderer()
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    document.body.appendChild(renderer.domElement)
+
+    light = new THREE.SpotLight(0xffffff)
+    light.position.set(10, 30, 20)
+    light.target.position.set(0, 0, 0)
+    if (true) {
+      light.castShadow = true
+
+      light.shadow.camera.near = 20
+      light.shadow.camera.far = 50 //camera.far;
+      light.shadow.camera.fov = 40
+
+      light.shadowMapBias = 0.1
+      light.shadowMapDarkness = 0.7
+      light.shadow.mapSize.width = 2 * 512
+      light.shadow.mapSize.height = 2 * 512
+
+      //light.shadowCameraVisible = true;
+    }
+    scene.add(light)
+
+    geometry = new THREE.PlaneGeometry(300, 300, 50, 50)
+    geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2))
+    material = new THREE.MeshLambertMaterial({ color: '#dddddd' })
+    mesh = new THREE.Mesh(geometry, material)
+    mesh.castShadow = true
+    mesh.receiveShadow = true
+    scene.add(mesh)
+
+    var geometry = new THREE.BoxGeometry()
+    var material = new THREE.MeshLambertMaterial({ color: '#ffffff' })
+    var cube = new THREE.Mesh(geometry, material)
+    cube.position.y = 0.5 * 1.2
+    cube.receiveShadow = true
+    cube.castShadow = true
+    scene.add(cube)
+
+    var geometry = new THREE.BoxGeometry()
+    var material = new THREE.MeshLambertMaterial({ color: '#ffffff' })
+    var cube = new THREE.Mesh(geometry, material)
+    cube.position.y = 0.5 * 1.2 * 3
+    cube.receiveShadow = true
+    cube.castShadow = true
+    scene.add(cube)
+
+    loader.load('line.gltf', function (gltf) {
+      console.log(gltf)
+      // scene.add(gltf.scene)
+    })
+
+    var animate = function () {
+      requestAnimationFrame(animate)
+
+      // cube.rotation.x += 0.01
+      // cube.rotation.y += 0.01
+
+      renderer.render(scene, camera)
+    }
+
+    animate()
+
+    // renderer.setClearColor(scene.fog.color, 1)
+
+    window.addEventListener('resize', onWindowResize, false)
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+    }
+  </script>
+</body>
