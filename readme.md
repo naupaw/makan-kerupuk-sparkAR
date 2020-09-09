@@ -11,6 +11,10 @@ But unfortunately due the short period for reviewing from Spark AR team, lack of
 - Tap the screen for starts a game and the timer will appear.
 - Put your mouth on the crackers and eat it until the crackers run out.
 
+## Assets
+- All 3d assets create using blender 3D
+- Image texture from google images
+
 The effects logic is mostly happened in `main.js`
 
 ## Screenshoot
